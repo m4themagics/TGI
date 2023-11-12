@@ -1,3 +1,5 @@
+package hw2_customListArray;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -5,17 +7,15 @@ import java.util.Objects;
 
 public class CustomArrayList<E> implements CustomList<E> {
     private static final int DEFAULT_CAPACITY = 10;
-    private E[] elements;
+    private Object[] elements;
     private int size = 0;
 
-    @SuppressWarnings("unchecked")
     public CustomArrayList() {
-        elements = (E[]) new Object[DEFAULT_CAPACITY];
+        elements = new Object[DEFAULT_CAPACITY];
     }
 
-    @SuppressWarnings("unchecked")
     public CustomArrayList(int initialCapacity) {
-        elements = (E[]) new Object[initialCapacity];
+        elements = new Object[initialCapacity];
     }
 
     private void increaseCapacity() {
@@ -56,10 +56,11 @@ public class CustomArrayList<E> implements CustomList<E> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E get(int index) {
         validateIndexForGetRemove(index);
-        return (elements[index]);
+        return (E) elements[index];
     }
 
     @Override
@@ -128,19 +129,20 @@ public class CustomArrayList<E> implements CustomList<E> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private int partition(int low, int high, Comparator<? super E> c) {
-        E pivot = elements[high];
+        E pivot = (E) elements[high];
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            if (c.compare(elements[j], pivot) <= 0) {
+            if (c.compare((E)elements[j], pivot) <= 0) {
                 i++;
-                E temp = elements[i];
+                E temp = (E) elements[i];
                 elements[i] = elements[j];
                 elements[j] = temp;
             }
         }
-        E temp = elements[i + 1];
+        E temp = (E) elements[i + 1];
         elements[i + 1] = elements[high];
         elements[high] = temp;
 
