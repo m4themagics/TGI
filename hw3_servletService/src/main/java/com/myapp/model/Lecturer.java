@@ -28,4 +28,29 @@ public class Lecturer {
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Lecturer lecturer = (Lecturer) obj;
+        return id == lecturer.id && name.equals(lecturer.name) && specialty.equals(lecturer.specialty);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (specialty != null ? specialty.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Lecturer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", specialty='" + specialty + '\'' +
+                '}';
+    }
 }
