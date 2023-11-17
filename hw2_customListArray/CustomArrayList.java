@@ -135,7 +135,7 @@ public class CustomArrayList<E> implements CustomList<E> {
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            if (c.compare((E)elements[j], pivot) <= 0) {
+            if (c.compare((E) elements[j], pivot) <= 0) {
                 i++;
                 E temp = (E) elements[i];
                 elements[i] = elements[j];
