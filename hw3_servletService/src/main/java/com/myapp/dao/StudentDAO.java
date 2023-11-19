@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    private final Connection connection;
+
+    private Connection connection;
 
     public StudentDAO() {
         this.connection = new DatabaseConnectionManager().getConnection();
@@ -27,21 +28,53 @@ public class StudentDAO {
                 student.setId(rs.getInt("id"));
                 student.setName(rs.getString("name"));
                 student.setAge(rs.getInt("age"));
-                student.setCourses(loadStudentCourses(connection, student.getId()));
+                student.setCourses(loadStudentsCourses(student.getId()));
                 students.add(student);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return students;
     }
 
-    public List<Course> loadStudentCourses(Connection conn, int studentId) throws SQLException {
+    public void insertStudent(Student student) {
+        String query = "INSERT INTO Student (id, name, age) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, student.getId());
+            stmt.setString(2, student.getName());
+            stmt.setInt(3, student.getAge());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteStudent(int id) {
+        String query = "DELETE FROM Student WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateStudent(Student student) {
+        String query = "UPDATE Student SET name = ?, age = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, student.getName());
+            stmt.setInt(2, student.getAge());
+            stmt.setInt(3, student.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Course> loadStudentsCourses(int studentId) throws SQLException {
         List<Course> courses = new ArrayList<>();
-        String query = "SELECT c.id, c.name, c.hours FROM Course c " +
+        String query = "SELECT c.id, c.name, c.hours, c.lecturer_id FROM Course c " +
                 "INNER JOIN StudentCourse sc ON c.id = sc.course_id " +
                 "WHERE sc.student_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, studentId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -49,6 +82,7 @@ public class StudentDAO {
                 course.setId(rs.getInt("id"));
                 course.setName(rs.getString("name"));
                 course.setHours(rs.getInt("hours"));
+                course.setLecturerId(rs.getInt("lecturer_id"));
                 courses.add(course);
             }
         }
