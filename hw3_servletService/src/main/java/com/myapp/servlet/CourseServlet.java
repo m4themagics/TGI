@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name = "StudentServlet", value = "/student")
-public class StudentServlet extends HttpServlet {
+@WebServlet(name = "CourseServlet", value = "/course")
+public class CourseServlet extends HttpServlet {
     private StudentDAO studentDAO;
 
     public void init() {
@@ -25,7 +25,7 @@ public class StudentServlet extends HttpServlet {
         try {
             List<Student> students = studentDAO.loadStudents();
             request.setAttribute("students", students);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("students.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
             if (dispatcher != null) {
                 dispatcher.forward(request, response);
             }
