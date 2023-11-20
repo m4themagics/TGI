@@ -1,7 +1,7 @@
 package com.myapp.tests;
 
+import com.myapp.Entity.Student;
 import com.myapp.dao.StudentDAO;
-import com.myapp.model.Student;
 import com.myapp.servlet.StudentServlet;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +12,6 @@ import org.mockito.MockitoAnnotations;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +35,13 @@ public class StudentServletTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        List<Student> students = new ArrayList<>();
-        when(studentDAO.loadStudents()).thenReturn(students);
+        List<Student> studentEntities = new ArrayList<>();
+        when(studentDAO.loadStudents()).thenReturn(studentEntities);
         when(request.getRequestDispatcher("students.jsp")).thenReturn(dispatcher);
 
         studentServlet.doGet(request, response);
 
-        verify(request).setAttribute("students", students);
+        verify(request).setAttribute("students", studentEntities);
         verify(dispatcher).forward(request, response);
     }
 

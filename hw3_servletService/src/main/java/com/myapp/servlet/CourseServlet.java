@@ -1,7 +1,7 @@
 package com.myapp.servlet;
 
+import com.myapp.Entity.Course;
 import com.myapp.dao.CourseDAO;
-import com.myapp.model.Course;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,8 +21,8 @@ public class CourseServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Course> courses = courseDAO.loadCourses();
-            request.setAttribute("courses", courses);
+            List<Course> cours = courseDAO.loadCourses();
+            request.setAttribute("courses", cours);
             request.getRequestDispatcher("courses.jsp").forward(request, response);
         } catch (SQLException e) {
             throw new ServletException("Error loading courses", e);
@@ -35,14 +35,12 @@ public class CourseServlet extends HttpServlet {
         if (action != null) {
             switch (action) {
                 case "add":
-                    int newcourseId = Integer.parseInt(request.getParameter("courseId"));
                     String courseName = request.getParameter("courseName");
                     int hours = Integer.parseInt(request.getParameter("hours"));
                     int lecturerId = Integer.parseInt(request.getParameter("lecturerId"));
 
                     Course newCourse = new Course();
-                    newCourse.setId(newcourseId);
-                    newCourse.setName(courseName);
+                    newCourse.setCourseName(courseName);
                     newCourse.setHours(hours);
                     newCourse.setLecturerId(lecturerId);
 
@@ -50,13 +48,11 @@ public class CourseServlet extends HttpServlet {
 
                     break;
                 case "update":
-                    int courseId = Integer.parseInt(request.getParameter("courseId"));
                     String updatedCourseName = request.getParameter("courseName");
                     int updatedHours = Integer.parseInt(request.getParameter("hours"));
                     int updatedLecturerId = Integer.parseInt(request.getParameter("lecturerId"));
                     Course updatedCourse = new Course();
-                    updatedCourse.setId(courseId);
-                    updatedCourse.setName(updatedCourseName);
+                    updatedCourse.setCourseName(updatedCourseName);
                     updatedCourse.setHours(updatedHours);
                     updatedCourse.setLecturerId(updatedLecturerId);
                     courseDAO.updateCourse(updatedCourse);

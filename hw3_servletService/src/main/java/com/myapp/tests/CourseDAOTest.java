@@ -1,8 +1,8 @@
 package com.myapp.tests;
 
+import com.myapp.Entity.Course;
+import com.myapp.Entity.Student;
 import com.myapp.dao.CourseDAO;
-import com.myapp.model.Course;
-import com.myapp.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +22,8 @@ public class CourseDAOTest {
 
     @Test
     public void testLoadCourses() throws SQLException {
-        List<Course> courses = courseDAO.loadCourses();
-        assertEquals(false, courses.isEmpty());
+        List<Course> cours = courseDAO.loadCourses();
+        assertEquals(false, cours.isEmpty());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class CourseDAOTest {
 
     @Test
     public void testLoadCourseStudents() throws SQLException {
-        List<Student> students = courseDAO.loadCoursesStudents(2);
-        assertEquals(false, students.isEmpty());
+        List<Student> studentEntities = courseDAO.loadCoursesStudents(2);
+        assertEquals(false, studentEntities.isEmpty());
     }
 }

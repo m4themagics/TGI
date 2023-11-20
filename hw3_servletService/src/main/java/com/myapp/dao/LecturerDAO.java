@@ -1,6 +1,6 @@
 package com.myapp.dao;
 
-import com.myapp.model.Lecturer;
+import com.myapp.Entity.Lecturer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ public class LecturerDAO {
     }
 
     public List<Lecturer> loadLecturers() {
-        List<Lecturer> lecturers = new ArrayList<>();
+        List<Lecturer> lecturerEntities = new ArrayList<>();
         String query = "SELECT * FROM Lecturer";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             ResultSet rs = stmt.executeQuery();
@@ -26,16 +26,16 @@ public class LecturerDAO {
                 lecturer.setId(rs.getInt("id"));
                 lecturer.setName(rs.getString("name"));
                 lecturer.setSpecialty(rs.getString("specialty"));
-                lecturers.add(lecturer);
+                lecturerEntities.add(lecturer);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return lecturers;
+        return lecturerEntities;
     }
 
     public void insertLecturer(Lecturer lecturer) {
-        String query = "INSERT INTO Lecturer (id, name, specialty) VALUES (?, ?, ?)";
+        String query = "INSERT INTO Lecturer (lecturer_id, lecturer_name, specialty) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, lecturer.getId());
             stmt.setString(2, lecturer.getName());
@@ -58,7 +58,7 @@ public class LecturerDAO {
             throw new RuntimeException(e);
         }
 
-        String deleteQuery = "DELETE FROM Lecturer WHERE id = ?";
+        String deleteQuery = "DELETE FROM Lecturer WHERE lecturer_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(deleteQuery)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -68,7 +68,7 @@ public class LecturerDAO {
     }
 
     public void updateLecturer(Lecturer lecturer) {
-        String query = "UPDATE Lecturer SET name = ?, specialty = ? WHERE id = ?";
+        String query = "UPDATE Lecturer SET lecturer_name = ?, specialty = ? WHERE lecturer_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, lecturer.getName());
             stmt.setString(2, lecturer.getSpecialty());

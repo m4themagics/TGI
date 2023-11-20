@@ -1,7 +1,7 @@
 package com.myapp.tests;
 
+import com.myapp.Entity.Course;
 import com.myapp.dao.CourseDAO;
-import com.myapp.model.Course;
 import com.myapp.servlet.CourseServlet;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,13 +44,13 @@ public class CourseServletTest {
 
     @Test
     public void testDoGet() throws Exception {
-        List<Course> courses = new ArrayList<>();
-        when(courseDAO.loadCourses()).thenReturn(courses);
+        List<Course> cours = new ArrayList<>();
+        when(courseDAO.loadCourses()).thenReturn(cours);
         when(request.getRequestDispatcher("courses.jsp")).thenReturn(requestDispatcher);
 
         courseServlet.doGet(request, response);
 
-        verify(request).setAttribute("courses", courses);
+        verify(request).setAttribute("courses", cours);
         verify(requestDispatcher).forward(request, response);
     }
 

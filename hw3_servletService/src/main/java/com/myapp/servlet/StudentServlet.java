@@ -1,8 +1,7 @@
 package com.myapp.servlet;
 
+import com.myapp.Entity.Student;
 import com.myapp.dao.StudentDAO;
-import com.myapp.model.Course;
-import com.myapp.model.Student;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentServlet extends HttpServlet {
@@ -23,51 +21,38 @@ public class StudentServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Student> students = studentDAO.loadStudents();
-            request.setAttribute("students", students);
+            List<Student> studentEntities = studentDAO.loadStudents();
+            request.setAttribute("students", studentEntities);
             request.getRequestDispatcher("students.jsp").forward(request, response);
         } catch (SQLException e) {
             throw new ServletException("Error loading students", e);
         }
     }
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if (action != null) {
             switch (action) {
                 case "add":
-                    int studentId = Integer.parseInt(request.getParameter("studentId"));
                     String studentName = request.getParameter("studentName");
                     int age = Integer.parseInt(request.getParameter("age"));
                     String course = request.getParameter("course");
 
                     Student newStudent = new Student();
-                    newStudent.setId(studentId);
-                    newStudent.setName(studentName);
+                    newStudent.setStudentName(studentName);
                     newStudent.setAge(age);
-                    List<Course> courses = new ArrayList<>();
-                    Course newCourse = new Course();
-                    newCourse.setName(course);
-                    courses.add(newCourse);
-                    newStudent.setCourses(courses);
 
                     studentDAO.insertStudent(newStudent);
                     break;
                 case "update":
-                    int studentIdToUpdate = Integer.parseInt(request.getParameter("studentId"));
                     String updatedStudentName = request.getParameter("studentName");
                     int updatedAge = Integer.parseInt(request.getParameter("age"));
                     String updatedCourse = request.getParameter("course");
 
                     Student updatedStudent = new Student();
-                    updatedStudent.setId(studentIdToUpdate);
-                    updatedStudent.setName(updatedStudentName);
+                    updatedStudent.setStudentName(updatedStudentName);
                     updatedStudent.setAge(updatedAge);
-                    List<Course> updatedCourses = new ArrayList<>();
-                    Course updatedCourseObj = new Course();
-                    updatedCourseObj.setName(updatedCourse);
-                    updatedCourses.add(updatedCourseObj);
-                    updatedStudent.setCourses(updatedCourses);
 
                     studentDAO.updateStudent(updatedStudent);
                     break;
